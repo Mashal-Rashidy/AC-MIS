@@ -36,6 +36,11 @@ class PermissionSeeder extends Seeder
                 "guard_name" => "web",
             ],
             [
+                "name" => "print-card",
+                "name_dr" => "چاپ کارت",
+                "guard_name" => "web",
+            ],
+            [
                 "name" => "Checking",
                 "name_dr" => "چک کردن ریکارد",
                 "guard_name" => "web",

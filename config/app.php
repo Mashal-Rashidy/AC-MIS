@@ -7,12 +7,9 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
-
     'env' => env('APP_ENV', 'production'),
 
-
     'debug' => (bool) env('APP_DEBUG', false),
-
 
     'url' => env('APP_URL', 'http://localhost'),
 
@@ -41,7 +38,7 @@ return [
     |
     | Supported drivers: "file", "cache"
     |
-    */
+     */
 
     'maintenance' => [
         'driver' => 'file',
@@ -57,7 +54,7 @@ return [
     | request to your application. Feel free to add your own services to
     | this array to grant expanded functionality to your applications.
     |
-    */
+     */
 
     'providers' => ServiceProvider::defaultProviders()->merge([
         /*
@@ -73,7 +70,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
-        niklasravnsborg\LaravelPdf\PdfServiceProvider::class
+        niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -85,14 +82,14 @@ return [
     | is started. However, feel free to register as many as you wish as
     | the aliases are "lazy" loaded so they don't hinder performance.
     |
-    */
+     */
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+        'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
-        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
-        'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class
     ])->toArray(),
 
 ];

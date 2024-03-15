@@ -8,6 +8,6 @@
         <p>{{ $cardData['create_date'] }}</p>
     </div>
     <div class="qr">
-        <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($cardData['id'], 'C128', 1.5) }}" alt="barcode" />
+        <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($card_id, 'C128', 2.5) }}" alt="barcode" />
     </div>
 </div>

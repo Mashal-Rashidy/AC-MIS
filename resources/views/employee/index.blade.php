@@ -476,9 +476,10 @@
                     window.frames["print_frame"].window.focus();
                     setTimeout(function() {
                         window.frames["print_frame"].window.print();
-                    }, 1000);
-                    window.frames["print_frame"].addEventListener('afterprint',
-                        onAfterPrintChangePrintStatusCustomer);
+                        window.frames["print_frame"].addEventListener('afterprint',
+                        onAfterPrintChangePrintStatusCustomer(employee_id));
+                    }, 2000);
+
                 },
                 error: function() {
                     error_function(

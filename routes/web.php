@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use Milon\Barcode\DNS1D;
 
 Illuminate\Support\Facades\Auth::routes();
 

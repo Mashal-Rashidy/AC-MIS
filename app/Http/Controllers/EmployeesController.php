@@ -2,19 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employees;
-use Carbon\Carbon;
 use DataTables;
+use Carbon\Carbon;
+use App\Models\Employees;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
+use Morilog\Jalali\Jalalian;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
-use Morilog\Jalali\Jalalian;
 
 class EmployeesController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:Select-record')->only(['employeeList','employeeCardUpdateStatus']);
+        $this->middleware('permission:print-card')->only('employeeCardPrint');
+        $this->middleware('permission:Create-record')->only('employeeCreate');
+        $this->middleware('permission:Update-record')->only('employeeEdit');
+        $this->middleware('permission:Update-record')->only('employeeUpdate');
+        $this->middleware('permission:Checking')->only('employeeCardCheckPage');
+        $this->middleware('permission:Checking')->only('employeeCardCheck');
+    }
+
     protected function employeeList(Request $request)
     {
         if ($request->ajax()) {
@@ -46,10 +58,14 @@ class EmployeesController extends Controller
                     return $url;
                 })
                 ->addColumn('action', function ($data) {
+                    $print = '';
+                    if (!auth()->user()->hasPermissionTo('print-card')) {
+                        $print = 'hidden';
+                    }
                     $btn = "
                      <div class='d-flex justify-contant-inline'>
                          <a onclick='editData(" . $data->id . ")' class='edit_btn ml-1' style='cursor: pointer;' title='تجدید معلومات' ><i class='btn btn-sm btn-outline-info btn-circle flaticon-edit-1'></i></a>
-                         <a class='edit_btn ml-1' title='چاپ کارت'  onclick='printEmployeeCard(" . $data->id . ")'><i class='btn btn-outline-dark btn-sm btn-circle flaticon2-printer'></i></a>
+                         <a class='edit_btn ml-1' title='چاپ کارت' " . $print . "  onclick='printEmployeeCard(" . $data->id . ")'><i class='btn btn-outline-dark btn-sm btn-circle flaticon2-printer'></i></a>
 
                      </div>
                  ";
@@ -140,14 +156,15 @@ class EmployeesController extends Controller
     protected function employeeCardPrint($id)
     {
         $data = Employees::findOrFail($id);
+        $card_id = (string)$data->id;
         $cardData = [
-            'id' => 'ID : ' . $data->id,
+            'id' => 'ID:' . $data->id,
             'name' => 'Name : ' . $data->name,
             'card_No' => 'Card No : ' . $data->employee_card_id,
             'create_date' => 'Issue Date : ' . Jalalian::fromCarbon($data->created_at)->format('Y-m-d'),
             'photo' => URL::asset($data->photo_path),
         ];
-        $card = view('employee.print-card', compact('cardData'))->render();
+        $card = view('employee.print-card', compact('cardData','card_id'))->render();
         return response()->json(['status' => true, 'card' => $card]);
     }
 
@@ -172,7 +189,7 @@ class EmployeesController extends Controller
             <tr>
                 <th>نمبر کارت کارمند : ' . $data->employee_card_id . '</th>
                 <th>اسم کارمند : ' . $data->name . '</th>
-                <th>عکس کارمند : <img src="'.asset($data->photo_path).'" width="200px" height="200px"></th>
+                <th>عکس کارمند : <img src="' . asset($data->photo_path) . '" width="200px" height="200px"></th>
             </tr>
             ';
         } else {

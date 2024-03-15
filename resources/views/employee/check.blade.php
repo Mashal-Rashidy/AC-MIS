@@ -35,7 +35,7 @@
         </div>
 
         <div class="card-footer">
-            <div class="alert alert-success" id="showMsgDiv" hidden>
+            <div class="alert alert-light" id="showMsgDiv" hidden>
                 <table class="table table-bordered">
                     <tbody id="showMsg">
 
@@ -47,6 +47,11 @@
 @endsection
 @section('scripts')
     <script>
+        $(document).ready(function() {
+            $('#search_id').keyup(function() {
+                $(this).select();
+            });
+        });
         $('#search_form').submit(function(event) {
             event.preventDefault();
             $.ajax({
@@ -58,10 +63,11 @@
                 },
                 success: function(response) {
                     stopPageLoader();
+                    $('#showMsg').html('')
                     if (response != '') {
                         $('#showMsg').append(response)
                         $('#showMsgDiv').attr('hidden', false);
-                    }else{
+                    } else {
                         $('#showMsgDiv').attr('hidden', true);
                         error_function('معلومات موجو نیست');
                     }

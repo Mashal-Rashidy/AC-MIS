@@ -1,8 +1,0 @@
-install xammp or wamp with php version 8
-
-install composer
-
-create databse with name acm
-
-add .env file to project main dirictory
-
